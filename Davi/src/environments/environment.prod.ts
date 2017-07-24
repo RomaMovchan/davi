@@ -1,3 +1,6 @@
 export const environment = {
-  production: true
+  production: false,
+  SERVER_URL: '',
+  API_URL: '',
+  autoFillLoginForm : false,
 };
