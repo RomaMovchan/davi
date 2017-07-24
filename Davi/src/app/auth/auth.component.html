@@ -1,3 +1,22 @@
-<p>
-  auth works!
-</p>
+
+<div class = "login-block-parent">
+  <div class="login-block">
+    <p class="reg-title">Da<span>Vi</span></p>
+    <form [formGroup]="authForm" (ngSubmit)="onAuth()">
+      <div class="login-block-content">
+        <span class="card-title">Login</span>
+        <p *ngIf="error">Authentication failed! Please try again</p>
+        <div>
+          <input placeholder="Username" type="text" formControlName="username">
+        </div>
+        <div>
+          <input placeholder="Password" type="password" formControlName="password">
+        </div>
+      </div>
+      <div class="login-block-content">
+        <button type="button" class="login_button" [disabled]="!authForm.valid">Login</button>
+        <button type="button" (click)="authForm.reset()">Reset</button>
+      </div>
+    </form>
+  </div>
+</div>
