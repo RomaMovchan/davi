@@ -34,15 +34,13 @@ export class HttpService {
 
   get(url: string): Observable<any> {
     this.requestUrl = this.serverUrl + url;
+    console.log(this.requestUrl);
     const headers = new Headers();
     this.createAuthorizationHeader(headers);
     return this.http.get(this.requestUrl, {
       headers: headers
     })
-      .map((data: Response) => {
-        console.log(data);
-        return data.json();
-      })
+      .map((data: Response) => data.json())
       .catch(this.handleError)
   }
 

@@ -16,6 +16,7 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot
   ): any {
     this.userService.isAuthenticated.subscribe(auth => {
+      console.log('authGuard', auth);
       if (auth) {
         return true;
       } else {

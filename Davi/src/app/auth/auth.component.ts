@@ -44,12 +44,15 @@ export class AuthComponent implements OnInit {
 
     this.httpService.post('user/login/', payload)
       .subscribe(
-        data => this.userService.setAuth(data),
+        data => {
+          this.userService.setAuth(data);
+          this.router.navigateByUrl('/home');
+        },
         error => {
           this.errors = error;
-          this.userService.purgeAuth()
+          this.userService.purgeAuth();
         }
-      )
+      );
   }
 
 }
