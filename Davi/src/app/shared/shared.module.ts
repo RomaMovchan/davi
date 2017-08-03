@@ -4,6 +4,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
+import { ListErrorsComponent } from './list-errors.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -13,13 +15,15 @@ import { RouterModule } from '@angular/router';
     RouterModule
   ],
   declarations: [
+    ListErrorsComponent
   ],
   exports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
-    RouterModule
+    RouterModule,
+    ListErrorsComponent
   ]
 })
 export class SharedModule {}

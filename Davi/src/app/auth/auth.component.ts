@@ -4,6 +4,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { UserService } from '../shared/services/user.service';
 import { HttpService } from '../shared/services/http.service';
+import { TokenService } from '../shared/services/token.service';
+
+import { CookieService } from 'angular2-cookie/services/cookies.service';
+import { Errors } from '../shared/classes/errors';
 
 @Component({
   selector: 'app-auth',
@@ -12,17 +16,20 @@ import { HttpService } from '../shared/services/http.service';
 })
 export class AuthComponent implements OnInit {
   authForm: FormGroup;
-  error = false;
+  errors: Errors = new Errors();
+  options: any;
 
   constructor(private httpService: HttpService,
               private userService: UserService,
+              private tokenService: TokenService,
+              private CookieService: CookieService,
               private route: ActivatedRoute,
               private router: Router,
               private fb: FormBuilder
   ) {
     this.authForm = fb.group({
-      'username': new FormControl('', Validators.required),
-      'password': new FormControl('', Validators.required)
+      'username': new FormControl('test@test.com', Validators.required),
+      'password': new FormControl('test123', Validators.required)
     });
   }
 
@@ -30,7 +37,19 @@ export class AuthComponent implements OnInit {
   }
 
   public onAuth() {
+    let payload = {
+      password: this.authForm.value.password,
+      username: this.authForm.value.username,
+    };
 
+    this.httpService.post('user/login/', payload)
+      .subscribe(
+        data => this.userService.setAuth(data),
+        error => {
+          this.errors = error;
+          this.userService.purgeAuth()
+        }
+      )
   }
 
 }

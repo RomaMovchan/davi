@@ -1,11 +1,12 @@
 export class User {
+  id: number;
   email: string;
-  token: string;
-  username: string;
+  first_name: string;
+  last_name: string;
 
-  /*constructor(email: string, token: string, username: string) {
+  /*constructor(email: string, id: number, username: string) {
     this.email = email;
-    this.token = token;
+    this.id = id;
     this.username = username;
   }*/
 }

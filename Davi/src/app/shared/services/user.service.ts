@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Response, Headers } from '@angular/http';
+
 import { Observable } from 'rxjs/Rx';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
-import { HttpService } from './http.service';
-import { TokenService } from './token.service';
-import { User } from '../classes/user';
+import { HttpService, TokenService } from './';
+import { User, Authanswer } from '../classes';
 
 @Injectable()
 export class UserService {
@@ -17,26 +17,15 @@ export class UserService {
 
   private isAuthenticatedSubject = new ReplaySubject<boolean>(1);
   public isAuthenticated = this.isAuthenticatedSubject.asObservable();
-
   constructor(private httpService: HttpService,
-              private tokenService: TokenService) {}
+              private tokenService: TokenService,
+              private http: Http) {}
 
-  authorization() {
-    // If JWT detected, attempt to get & store user's info
-    if (this.tokenService.getToken()) {
-      this.httpService.get('/user')
-        .subscribe(
-          data => this.setAuth(data.user),
-          err => this.purgeAuth()
-        );
-    } else {
-      this.purgeAuth();
-    }
-  }
 
-  setAuth(user: User) {
-    this.tokenService.setToken(user.token);
-    this.currentUserSubject.next(user);
+  setAuth(answer: Authanswer) {
+    this.tokenService.setToken(answer.access_token);
+    console.log(this.tokenService.getToken());
+    this.currentUserSubject.next(answer.user);
     this.isAuthenticatedSubject.next(true);
   }
 

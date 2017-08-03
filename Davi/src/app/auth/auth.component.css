@@ -14,23 +14,51 @@
   display: block;
   border: 2px solid blue;
   padding: 20px;
-  width: 30%;
+  width: 50%;
   text-align: center;
   background: beige;
 }
 
 .reg-title {
   font-size: 60px;
-  color: blue;
-  font-family: cursive;
 }
+
 
 .reg-title span {
   color: red;
 }
 
-.login-block-content input {
-  width: 50%;
-  margin: 10px 0;
+.flex-container {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 200px;
+  left: 0;
+  right: 0;
+  background-color: #4F2A81;
+  content: "";
+  box-shadow: 0 2px 4px 1px rgba(0,0,0,.14);
+  z-index: 0;
+}
+.btn{
+  width: 100%;
+  margin-bottom: 20px;
 }
 
+.btn-login {
+  background: #8C45DA;
+}
+
+.btn-reset {
+  background: #F5AD4D;
+}
+
+.forgot {
+  color: red;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+}
+.forgot:hover {
+  text-decoration: underline;
+}

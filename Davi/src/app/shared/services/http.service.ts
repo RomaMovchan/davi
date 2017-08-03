@@ -19,87 +19,45 @@ export class HttpService {
 
   private createAuthorizationHeader(headers: Headers) {
     headers.append('Accept', 'application/json');
-    headers.append('Authorization', 'Bearer ' +
-      this.tokenService.getToken());
+    headers.append('Content-Type', 'application/json');
+
+    if (this.tokenService.getToken()) {
+      headers.append('Authorization', `Token ${this.tokenService.getToken()}`);
+    }
   }
 
   private handleError(error: any) {
+    console.log(error);
     return Observable.throw(error.json());
   }
 
-  /*get(path: string, params: URLSearchParams = new URLSearchParams()): Observable<any> {
-    return this._http.get(`${environment.api_url}${path}`, { headers: this.setHeaders(), search: params })
-      .catch(this.formatErrors)
-      .map((res: Response) => res.json());
-  }
 
-  put(path: string, body: Object = {}): Observable<any> {
-    return this.http.put(
-      `${environment.api_url}${path}`,
-      JSON.stringify(body),
-      { headers: this.setHeaders() }
-    )
-      .catch(this.formatErrors)
-      .map((res: Response) => res.json());
-  }
-
-  post(path: string, body: Object = {}): Observable<any> {
-    return this.http.post(
-      `${environment.api_url}${path}`,
-      JSON.stringify(body),
-      { headers: this.setHeaders() }
-    )
-      .catch(this.formatErrors)
-      .map((res: Response) => res.json());
-  }
-
-  delete(path): Observable<any> {
-    return this.http.delete(
-      `${environment.api_url}${path}`,
-      { headers: this.setHeaders() }
-    )
-      .catch(this.formatErrors)
-      .map((res: Response) => res.json());
-  }*/
-
-  get(url: any) {
+  get(url: string): Observable<any> {
     this.requestUrl = this.serverUrl + url;
     const headers = new Headers();
     this.createAuthorizationHeader(headers);
     return this.http.get(this.requestUrl, {
       headers: headers
     })
+      .map((data: Response) => {
+        console.log(data);
+        return data.json();
+      })
+      .catch(this.handleError)
+  }
+
+  post(url: string, data: any): Observable<any> {
+    this.requestUrl = this.serverUrl + url;
+    const headers = new Headers();
+    this.createAuthorizationHeader(headers);
+    return this.http.post(this.requestUrl, data, {
+      headers: headers
+    })
       .map((data: Response) => data.json())
       .catch(this.handleError)
   }
+
 /*
-  getStatus(url: any) {
-    this.requestUrl = this.serverUrl + url;
-    let headers = new Headers();
-    this.createAuthorizationHeader(headers);
-    return this._http.get(this.requestUrl, {
-      headers: headers
-    }).map((data: Response) =>  data);
-  }
-
-  post(url: any, data: any, flag?: boolean) {
-    this.requestUrl = this.serverUrl + url;
-    let headers = new Headers();
-    if (flag) {
-      this.createRegistrationHeader(headers);
-      console.log('headers Registration', headers);
-    } else {
-      this.createAuthorizationHeader(headers);
-      console.log('headers Auth', headers);
-    }
-    return this._http.post(this.requestUrl, data, {
-      headers: headers
-    })
-      .share()
-      .map((data: Response) => data.json())
-
-      .catch(this.handleError);
-  }
 
   delete(url: any) {
     this.requestUrl = this.serverUrl + url;
@@ -123,20 +81,6 @@ export class HttpService {
       .catch(this.handleError);
 
   }
-
-  createAuthorizationHeader(headers: Headers) {
-    headers.append('Accept', 'application/json');
-    headers.append('Authorization', 'Bearer ' +
-      sessionStorage.getItem('token'));
-  }
-
-  createRegistrationHeader(headers: Headers) {
-    headers.append('Content-Type', 'application/json');
-  }
-
-  private handleError(error: any ) {
-    console.log(error);
-    return Observable.throw(error.json());
-  }*/
+*/
 }
 
