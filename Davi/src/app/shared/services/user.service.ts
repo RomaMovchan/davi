@@ -28,7 +28,6 @@ export class UserService {
     this.tokenService.setToken(answer.access_token);
     this.currentUserSubject.next(answer.user);
     this.isAuthenticatedSubject.next(true);
-
   }
 
   purgeAuth() {
@@ -53,6 +52,22 @@ export class UserService {
         (data) => {
           console.log(data);
           this.purgeAuth();
+        }
+      );
+  }
+
+  refreshToken() {
+    let tokenObj = {
+      refresh_token: this.tokenService.getToken()
+    };
+    console.log(tokenObj);
+    this.httpService.post('user/get_new_tokens_by_refresh_token/', tokenObj)
+      .subscribe(
+        (data) => {
+          console.log(data);
+        },
+        error => {
+          console.log(error);
         }
       );
   }

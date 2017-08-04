@@ -16,7 +16,8 @@ import { Errors } from '../shared/classes/errors';
 })
 export class AuthComponent implements OnInit {
   authForm: FormGroup;
-  errors: Errors = new Errors();
+  //errors: Errors = new Errors();
+  errors: string;
   options: any;
 
   constructor(private httpService: HttpService,
@@ -48,8 +49,8 @@ export class AuthComponent implements OnInit {
           this.userService.setAuth(data);
           this.router.navigateByUrl('/home');
         },
-        error => {
-          this.errors = error;
+        error => {;
+          this.errors = error._body;
           this.userService.purgeAuth();
         }
       );
