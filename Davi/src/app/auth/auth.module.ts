@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AuthComponent } from './auth.component';
 /*import { AuthGuard } from '../shared/services/auth-guard.service';*/
+import { NoAuthGuard } from './no-auth-guard.service';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 import { SharedModule } from '../shared';
 

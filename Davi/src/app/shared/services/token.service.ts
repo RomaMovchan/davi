@@ -10,23 +10,33 @@ export class TokenService {
     let date = new Date();
     const expiresTime = new Date(date.getTime() + 14 * 24 * 60 * 60 * 1000);
     this.options = {
-      expires: expiresTime,
-      path: '/',
-      domain: '',
       secure: true
     };
   }
 
-  getToken(): string {
+  public getToken(): string {
     return this.cookieService.get('access_token');
   }
 
-  setToken(token: string) {
-    this.cookieService.put('access_token', token);
+  public getRefreshToken(): string {
+    return this.cookieService.get('refresh_token');
   }
 
-  clearToken() {
+  public setToken(token: string) {
+    this.cookieService.put('access_token', token);
+   /* var updatedCookie = 'access_token' + '=' + token + ';secure';
+    console.log('updatedCookie', updatedCookie);
+    document.cookie = updatedCookie;
+    console.log('document.cookie', document.cookie);*/
+  }
+
+  public setRefreshToken(refresh_token: string) {
+    this.cookieService.put('refresh_token', refresh_token);
+  }
+
+  public clearToken() {
     this.cookieService.remove('access_token');
+    this.cookieService.remove('refresh_token');
   }
 
 

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { UserService } from '../shared/services';
 
@@ -9,19 +10,29 @@ import { UserService } from '../shared/services';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService,
+              private router: Router) { }
 
   ngOnInit() {
+    this.userService.isAuthenticated.subscribe(isAuth => {
+      if (!isAuth) {
+        console.log('NotAuth', isAuth);
+        this.router.navigateByUrl('/login');
+        return;
+      } else {
+        console.log('Auth', isAuth);
+      }
+    })
   }
 
-  getAllUsers() {
+  public getAllUsers() {
     this.userService.getAllUsers();
     this.userService.users.subscribe(users => {
       console.log('users', users);
     });
   }
 
-  logout() {
+  public logout() {
     this.userService.logout();
     this.userService.isAuthenticated.subscribe(auth => {
       if (!auth) {
@@ -30,8 +41,8 @@ export class HomeComponent implements OnInit {
     })
   }
 
-  refresh() {
-    // /this.userService.refreshToken();
+  public refresh() {
+    this.userService.refreshToken();
   }
 
 

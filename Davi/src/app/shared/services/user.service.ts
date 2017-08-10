@@ -26,6 +26,7 @@ export class UserService {
 
   setAuth(answer: Authanswer) {
     this.tokenService.setToken(answer.access_token);
+    this.tokenService.setRefreshToken(answer.refresh_token);
     this.currentUserSubject.next(answer.user);
     this.isAuthenticatedSubject.next(true);
   }
@@ -57,17 +58,19 @@ export class UserService {
   }
 
   refreshToken() {
-    let tokenObj = {
-      refresh_token: this.tokenService.getToken()
+    let payload = {
+      refresh_token: this.tokenService.getRefreshToken()
     };
-    console.log(tokenObj);
-    this.httpService.post('user/get_new_tokens_by_refresh_token/', tokenObj)
+    console.log(payload);
+    this.httpService.post('user/get_new_tokens_by_refresh_token/', payload)
       .subscribe(
         (data) => {
           console.log(data);
+          this.setAuth(data);
         },
         error => {
           console.log(error);
+          this.purgeAuth();
         }
       );
   }

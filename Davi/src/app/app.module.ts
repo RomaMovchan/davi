@@ -13,18 +13,22 @@ import { routing } from './app.route';
 import { AuthModule } from './auth/auth.module';
 import { SharedModule } from './shared/shared.module';
 import { HomeModule } from './home/home.module';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 import {
   TokenService,
   UserService,
-  HttpService
+  HttpService,
+  ErrorService
 } from './shared/services';
+
 
 const rootRouting: ModuleWithProviders = RouterModule.forRoot([], { useHash: true });
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
@@ -41,6 +45,7 @@ const rootRouting: ModuleWithProviders = RouterModule.forRoot([], { useHash: tru
     TokenService,
     UserService,
     HttpService,
+    ErrorService,
     [Location, {provide: LocationStrategy, useClass: HashLocationStrategy}],
   ],
   bootstrap: [ AppComponent ]

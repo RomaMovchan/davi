@@ -4,8 +4,7 @@
 <div class = "login-block-parent">
   <div class="login-block">
     <p class="reg-title">Sign in</p>
-    <div class="error-block" *ngIf="errors">{{errors}}</div>
-   <!-- <list-errors [errors]="errors"></list-errors>-->
+    <list-errors [errors]="errors"></list-errors>
     <form [formGroup]="authForm" (ngSubmit)="onAuth()">
       <div class="login-block-content">
         <div class="row">

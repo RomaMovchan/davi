@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { Errors } from './classes';
+import { Error } from './classes';
 
 @Component({
   selector: 'list-errors',
@@ -10,12 +10,11 @@ export class ListErrorsComponent {
   formattedErrors: Array<string> = [];
 
   @Input()
-  set errors(errorList: Errors) {
+  set errors(errorList: Error) {
     this.formattedErrors = [];
-
-    if (errorList.errors) {
-      for (const field in errorList.errors) {
-        this.formattedErrors.push(`${field} ${errorList.errors[field]}`);
+    if (errorList) {
+      for (const field in errorList.detail) {
+        this.formattedErrors.push(`${field} : ${errorList.detail[field]}`);
       }
     }
   };

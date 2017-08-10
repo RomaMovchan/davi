@@ -11,7 +11,7 @@ const homeRouting: ModuleWithProviders = RouterModule.forChild([
   {
     path: 'home',
     component: HomeComponent,
-    // canActivate: [AuthGuard]
+    //canActivate: [AuthGuard]
     resolve: {
       isAuthenticated: HomeAuthResolver
     }
@@ -25,7 +25,8 @@ const homeRouting: ModuleWithProviders = RouterModule.forChild([
   ],
   declarations: [HomeComponent],
   providers: [
-    HomeAuthResolver
+    HomeAuthResolver,
+    AuthGuard
   ]
 })
 export class HomeModule { }

@@ -28,13 +28,15 @@ export class HttpService {
 
   private handleError(error: any) {
     console.log(error);
+    if (error.status === 400 && error.statusText === 'Unauthorized') {
+      console.log('Token Expired');
+    }
     return Observable.throw(error.json());
   }
 
 
   get(url: string): Observable<any> {
     this.requestUrl = this.serverUrl + url;
-    console.log(this.requestUrl);
     const headers = new Headers();
     this.createAuthorizationHeader(headers);
     return this.http.get(this.requestUrl, {
@@ -52,16 +54,14 @@ export class HttpService {
       headers: headers
     })
       .map((data: Response) => data.json())
-      // .catch(this.handleError)
+      .catch(this.handleError);
   }
-
-/*
 
   delete(url: any) {
     this.requestUrl = this.serverUrl + url;
-    let headers = new Headers();
+    const headers = new Headers();
     this.createAuthorizationHeader(headers);
-    return this._http.delete(this.requestUrl, {
+    return this.http.delete(this.requestUrl, {
       headers: headers
     })
       .catch(this.handleError);
@@ -69,16 +69,14 @@ export class HttpService {
 
   put(url: any, data: any) {
     this.requestUrl = this.serverUrl + url;
-    let headers = new Headers();
+    const headers = new Headers();
     this.createAuthorizationHeader(headers);
-    return this._http.put(this.requestUrl, data, {
+    return this.http.put(this.requestUrl, data, {
       headers: headers
     })
-      .map(data => console.log(data.statusText))
-      .share()
+      .map(data => data.json())
       .catch(this.handleError);
-
   }
-*/
+
 }
 

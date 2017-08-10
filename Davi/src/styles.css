@@ -1,3 +1,7 @@
-.error-block {
+.error-messages {
   color: red;
 }
+.error-messages li::first-letter {
+  text-transform: uppercase;
+}
+

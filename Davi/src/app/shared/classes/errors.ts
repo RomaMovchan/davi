@@ -1,3 +1,4 @@
-export class Errors {
-  errors: {[key: string]: string} = {};
+export class Error {
+  detail: any;
+  statusCode: number;
 }
