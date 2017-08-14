@@ -1,6 +1,6 @@
 import { User } from './user';
 
-export class Authanswer {
+export class AuthAnswer {
   access_token: string;
   refresh_token: string;
   refresh_token_expires: string;

@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs/Rx';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
 import { HttpService, TokenService } from './';
-import { User, Authanswer } from '../classes';
+import { User, AuthAnswer } from '../classes';
 
 @Injectable()
 export class UserService {
@@ -24,9 +23,11 @@ export class UserService {
               private tokenService: TokenService) {}
 
 
-  setAuth(answer: Authanswer) {
-    this.tokenService.setToken(answer.access_token);
-    this.tokenService.setRefreshToken(answer.refresh_token);
+  setAuth(answer: AuthAnswer) {
+    console.log(answer);
+    this.tokenService.setToken(answer.access_token, answer.refresh_token, answer.refresh_token_expires);
+    const date = new Date(answer.refresh_token_expires);
+    console.log(date);
     this.currentUserSubject.next(answer.user);
     this.isAuthenticatedSubject.next(true);
   }
@@ -43,6 +44,11 @@ export class UserService {
         (data) => {
           console.log(data);
           this.usersSubject.next(data.results);
+        },
+        (error) => {
+          if (!error) {
+            return this.getAllUsers();
+          }
         }
       );
   }
@@ -53,6 +59,9 @@ export class UserService {
         (data) => {
           console.log(data);
           this.purgeAuth();
+        },
+        (error) => {
+          console.log(error);
         }
       );
   }

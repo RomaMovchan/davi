@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
-import { Headers, Http, Response, URLSearchParams } from '@angular/http';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Headers, Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
+import { environment } from '../../../environments/environment';
 import { TokenService } from './token.service';
+import { AuthAnswer } from '../classes/auth_answer';
 
 @Injectable()
 export class HttpService {
@@ -13,9 +15,12 @@ export class HttpService {
   requestUrl: string;
 
   constructor(
+    private tokenService: TokenService,
     private http: Http,
-    private tokenService: TokenService
-  ) {}
+    private router: Router
+  ) {
+
+  }
 
   private createAuthorizationHeader(headers: Headers) {
     headers.append('Accept', 'application/json');
@@ -26,14 +31,35 @@ export class HttpService {
     }
   }
 
+
   private handleError(error: any) {
     console.log(error);
-    if (error.status === 400 && error.statusText === 'Unauthorized') {
-      console.log('Token Expired');
+    const catch_error = error.json();
+    if (catch_error.detail.hasOwnProperty('error')) {
+      if (catch_error.detail.error[0] === 'Token expired' && catch_error.status_code === 401) {
+        console.log(true);
+        this.router.navigate(['login']);
+        return;
+       /* const token_expiration = new Date(this.tokenService.getExpirationTime());
+        const date_now = new Date();
+        if (token_expiration <= date_now) {
+          this.router.navigate(['login']);
+          return;
+        }*/
+      } else {
+        if (catch_error.detail.error[0] === 'Invalid token' && catch_error.status_code === 401) {
+          this.tokenService.refreshToken().subscribe((data: AuthAnswer) => {
+            this.tokenService.setToken(data.access_token, data.refresh_token, data.refresh_token_expires);
+          });
+          return Observable.throw(false);
+        } else {
+          return Observable.throw(error.json());
+        }
+      }
+    } else {
+      return Observable.throw(error.json());
     }
-    return Observable.throw(error.json());
   }
-
 
   get(url: string): Observable<any> {
     this.requestUrl = this.serverUrl + url;
@@ -43,7 +69,7 @@ export class HttpService {
       headers: headers
     })
       .map((data: Response) => data.json())
-      .catch(this.handleError)
+      .catch(this.handleError.bind(this))
   }
 
   post(url: string, data: any): Observable<any> {
@@ -54,7 +80,7 @@ export class HttpService {
       headers: headers
     })
       .map((data: Response) => data.json())
-      .catch(this.handleError);
+      .catch(this.handleError.bind(this));
   }
 
   delete(url: any) {
@@ -64,7 +90,7 @@ export class HttpService {
     return this.http.delete(this.requestUrl, {
       headers: headers
     })
-      .catch(this.handleError);
+      .catch(this.handleError.bind(this));
   }
 
   put(url: any, data: any) {
@@ -75,7 +101,7 @@ export class HttpService {
       headers: headers
     })
       .map(data => data.json())
-      .catch(this.handleError);
+      .catch(this.handleError.bind(this));
   }
 
 }

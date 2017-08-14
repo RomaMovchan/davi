@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  SERVER_URL: ' http://35.158.201.96',
+  SERVER_URL: 'http://35.158.201.96',
   API_URL: '/api/1.0/',
   autoFillLoginForm : true,
 };
